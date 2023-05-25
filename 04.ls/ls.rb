@@ -1,12 +1,23 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'optparse'
+
+opts = OptionParser.new
+program_configs = []
+opts.on('-r') { program_configs.push('r') }
+opts.parse!(ARGV)
+
 COLUMNS = 3
 
 directory_path = ARGV[0] || '.'
 
-def get_file(path)
-  Dir.glob('*', base: path, sort: true)
+def get_file(path, option)
+  if option.include?('r')
+    Dir.glob('*', base: path, sort: true).reverse
+  else
+    Dir.glob('*', base: path, sort: true)
+  end
 end
 
 def get_max_length(files_and_directories)
@@ -17,7 +28,7 @@ def organizing_arrays(files_and_directories, columns, output_num)
   outputs = Array.new(columns) { [] }
 
   array_num = 0
-  files_and_directories.sort.each do |item|
+  files_and_directories.each do |item|
     outputs[array_num] << item
     array_num += 1 if (outputs[array_num].length % output_num).zero?
   end
@@ -33,7 +44,8 @@ def output_file(output_num, columns, file_name_length, files_and_directories)
     puts "\n"
   end
 end
-temporary_outputs = get_file(directory_path)
+
+temporary_outputs = get_file(directory_path, program_configs)
 max_file_length = get_max_length(temporary_outputs)
 # 一列に出力するファイルの数
 maximum_num = temporary_outputs.length / COLUMNS + 1
