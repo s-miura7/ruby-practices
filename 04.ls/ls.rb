@@ -35,11 +35,12 @@ def organizing_arrays(files_and_directories, columns, output_num)
   outputs
 end
 
-def output_file(output_num, columns, file_name_length, files_and_directories)
+def output_file(output_num, columns, file_name_length, files_and_directories, option)
   output_num.times do |time|
     columns.times do |column|
       print files_and_directories[column][time]
-      print ' ' * (file_name_length - files_and_directories[column][time].to_s.length + 1)
+      print (option.include?('r') ? '  ' : ' ') * (file_name_length - files_and_directories[column][time].to_s.length + 1)
+      print ' ' if files_and_directories[column][time].to_s.match?(/[A-Za-z0-9]+/)
     end
     puts "\n"
   end
@@ -50,4 +51,4 @@ max_file_length = get_max_length(temporary_outputs)
 # 一列に出力するファイルの数
 maximum_num = temporary_outputs.length / COLUMNS + 1
 outputs = organizing_arrays(temporary_outputs, COLUMNS, maximum_num)
-output_file(maximum_num, COLUMNS, max_file_length, outputs)
+output_file(maximum_num, COLUMNS, max_file_length, outputs, program_configs)
