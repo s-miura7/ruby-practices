@@ -5,7 +5,7 @@ require 'optparse'
 
 opts = OptionParser.new
 params = {}
-opts.on('-r') {|v| params[:r] = v }
+opts.on('-r') { |v| params[:r] = v }
 opts.parse!(ARGV)
 
 COLUMNS = 3
@@ -24,23 +24,21 @@ def get_max_length(files_and_directories)
   files_and_directories.map(&:length).max
 end
 
-def organizing_arrays(files_and_directories, columns, output_num)
+def organizing_arrays(file_name_length, files_and_directories, columns, output_num)
   outputs = Array.new(columns) { [] }
 
   array_num = 0
   files_and_directories.each do |item|
-    outputs[array_num] << item
+    outputs[array_num] << sprintf.call("%-#{file_name_length * 2}s", item)
     array_num += 1 if (outputs[array_num].length % output_num).zero?
   end
   outputs
 end
 
-def output_file(output_num, columns, file_name_length, files_and_directories, option)
+def output_file(output_num, columns, file_name_length, files_and_directories)
   output_num.times do |time|
     columns.times do |column|
       print files_and_directories[column][time]
-      print (option[:r]? '  ' : ' ') * (file_name_length - files_and_directories[column][time].to_s.length + 1)
-      print ' ' if files_and_directories[column][time].to_s.match?(/[A-Za-z0-9]+/)
     end
     puts "\n"
   end
@@ -50,5 +48,5 @@ temporary_outputs = get_file(directory_path, params)
 max_file_length = get_max_length(temporary_outputs)
 # 一列に出力するファイルの数
 maximum_num = temporary_outputs.length / COLUMNS + 1
-outputs = organizing_arrays(temporary_outputs, COLUMNS, maximum_num)
-output_file(maximum_num, COLUMNS, max_file_length, outputs, params)
+outputs = organizing_arrays(max_file_length, temporary_outputs, COLUMNS, maximum_num)
+output_file(maximum_num, COLUMNS, max_file_length, outputs)
