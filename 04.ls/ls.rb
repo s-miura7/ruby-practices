@@ -28,14 +28,13 @@ def organizing_arrays(file_name_length, files_and_directories, columns, output_n
   outputs = Array.new(columns) { [] }
   array_num = 0
   files_and_directories.each do |item|
-    item.tr!('０-９ａ-ｚＡ-Ｚ','0-9a-zA-Z')
-    outputs[array_num] << item.ljust(file_name_length * 2)
+    outputs[array_num] << item.ljust(file_name_length + 1)
     array_num += 1 if (outputs[array_num].length % output_num).zero?
   end
   outputs
 end
 
-def output_file(output_num, columns, file_name_length, files_and_directories)
+def output_file(output_num, columns, files_and_directories)
   output_num.times do |time|
     columns.times do |column|
       print files_and_directories[column][time]
@@ -49,4 +48,5 @@ max_file_length = get_max_length(temporary_outputs)
 # 一列に出力するファイルの数
 maximum_num = temporary_outputs.length / COLUMNS + 1
 outputs = organizing_arrays(max_file_length, temporary_outputs, COLUMNS, maximum_num)
-output_file(maximum_num, COLUMNS, max_file_length, outputs)
+output_file(maximum_num, COLUMNS, outputs)
+
