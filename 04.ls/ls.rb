@@ -29,7 +29,7 @@ def organizing_arrays(file_name_length, files_and_directories, columns, output_n
 
   array_num = 0
   files_and_directories.each do |item|
-    outputs[array_num] << sprintf.call("%-#{file_name_length * 2}s", item)
+    outputs[array_num] << item.ljust(file_name_length + 1)
     array_num += 1 if (outputs[array_num].length % output_num).zero?
   end
   outputs
