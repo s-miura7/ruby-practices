@@ -26,10 +26,10 @@ end
 
 def organizing_arrays(file_name_length, files_and_directories, columns, output_num)
   outputs = Array.new(columns) { [] }
-
   array_num = 0
   files_and_directories.each do |item|
-    outputs[array_num] << item.ljust(file_name_length + 1)
+    item.tr!('０-９ａ-ｚＡ-Ｚ','0-9a-zA-Z')
+    outputs[array_num] << item.ljust(file_name_length * 2)
     array_num += 1 if (outputs[array_num].length % output_num).zero?
   end
   outputs
