@@ -69,8 +69,8 @@ def get_max_length(files_and_directories)
   files_and_directories.map { |files_and_directorie| files_and_directorie[:name].length }.max
 end
 
-def organizing_arrays(file_name_length, files_and_directories, columns, output_num)
-  outputs = Array.new(columns) { [] }
+def organizing_arrays(file_name_length, files_and_directories, output_num)
+  outputs = Array.new(COLUMNS) { [] }
   array_num = 0
   files_and_directories.each do |item|
     item[:name] = item[:name].ljust(file_name_length * 2 - item[:name].scan(/[^\x01-\x7E]/).size)
@@ -109,6 +109,6 @@ else
   max_file_length = get_max_length(temporary_outputs)
   # 一列に出力するファイルの数
   maximum_num = temporary_outputs.length / COLUMNS + 1
-  outputs = organizing_arrays(max_file_length, temporary_outputs, COLUMNS, maximum_num)
+  outputs = organizing_arrays(max_file_length, temporary_outputs, maximum_num)
   output_file(maximum_num, outputs)
 end
