@@ -48,7 +48,7 @@ def get_permission(target)
 end
 
 def get_details(files_and_directories, options)
-  files_and_directories.map! do |file_or_directory|
+  files_and_directories.map do |file_or_directory|
     details_files_and_directorie = {}
     if options[:l]
       permission = get_permission(file_or_directory)
