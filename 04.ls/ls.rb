@@ -81,26 +81,33 @@ def organizing_arrays(file_name_length, files_and_directories, columns, output_n
 end
 
 def output_file(output_num, files_and_directories, options)
-  puts "total #{files_and_directories.flatten.length}" if options[:l]
   output_num.times do |time|
-    files_and_directories[time].length.times do |column|
-      if options[:l]
-        files_and_directories[column][time].each do |_key, value|
-          print value
-        end
-        puts "\n"
-      else
-        print files_and_directories[column][time][:name] unless files_and_directories[column][time].nil?
-      end
+    COLUMNS.times do |column|
+      next if files_and_directories[column][time].nil?
+      print files_and_directories[column][time][:name]
     end
-    puts "\n" unless options[:l]
+    puts "\n"
+  end
+end
+
+def output_file_with_l(files_and_directories)
+  puts "total #{files_and_directories.flatten.length}"
+  files_and_directories.each do |file_or_directory|
+    file_or_directory.each do |_key, value|
+      print value
+    end
+      puts "\n"
   end
 end
 
 temporary_outputs = get_file(directory_path)
 temporary_outputs = get_details(temporary_outputs, params)
-max_file_length = get_max_length(temporary_outputs)
-# 一列に出力するファイルの数
-maximum_num = temporary_outputs.length / COLUMNS + 1
-outputs = organizing_arrays(max_file_length, temporary_outputs, COLUMNS, maximum_num)
-output_file(maximum_num, outputs, params)
+if params[:l]
+  output_file_with_l(temporary_outputs)
+else
+  max_file_length = get_max_length(temporary_outputs)
+  # 一列に出力するファイルの数
+  maximum_num = temporary_outputs.length / COLUMNS + 1
+  outputs = organizing_arrays(max_file_length, temporary_outputs, COLUMNS, maximum_num)
+  output_file(maximum_num, outputs, params)
+end
