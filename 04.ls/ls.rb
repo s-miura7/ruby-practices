@@ -80,10 +80,11 @@ def organizing_arrays(file_name_length, files_and_directories, columns, output_n
   outputs
 end
 
-def output_file(output_num, files_and_directories, options)
+def output_file(output_num, files_and_directories)
   output_num.times do |time|
     COLUMNS.times do |column|
       next if files_and_directories[column][time].nil?
+
       print files_and_directories[column][time][:name]
     end
     puts "\n"
@@ -96,7 +97,7 @@ def output_file_with_l(files_and_directories)
     file_or_directory.each do |_key, value|
       print value
     end
-      puts "\n"
+    puts "\n"
   end
 end
 
@@ -109,5 +110,5 @@ else
   # 一列に出力するファイルの数
   maximum_num = temporary_outputs.length / COLUMNS + 1
   outputs = organizing_arrays(max_file_length, temporary_outputs, COLUMNS, maximum_num)
-  output_file(maximum_num, outputs, params)
+  output_file(maximum_num, outputs)
 end
