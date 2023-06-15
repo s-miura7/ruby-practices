@@ -49,19 +49,19 @@ end
 
 def get_details(files_and_directories, options)
   files_and_directories.map do |file_or_directory|
-    details_files_and_directorie = {}
+    details_files_and_directories = {}
     if options[:l]
       permission = get_permission(file_or_directory)
-      details_files_and_directorie[:permission] = permission
+      details_files_and_directories[:permission] = permission
       file_stat = File::Stat.new(file_or_directory)
-      details_files_and_directorie[:links] = file_stat.nlink.to_s.rjust(file_stat.nlink.to_s.length.to_i + 1)
-      details_files_and_directorie[:owner] = Etc.getpwuid(file_stat.uid).name.rjust(Etc.getpwuid(file_stat.uid).name.length.to_i + 1)
-      details_files_and_directorie[:group] = Etc.getgrgid(file_stat.gid).name.rjust(Etc.getgrgid(file_stat.gid).name.length.to_i + 1)
-      details_files_and_directorie[:byte_size] = file_stat.size.to_s.rjust(BYTE_LENGTH + 1)
-      details_files_and_directorie[:time] = file_stat.mtime.strftime('%m %d %H:%M').center(file_stat.mtime.strftime('%m %d %H:%M').length + 2)
+      details_files_and_directories[:links] = file_stat.nlink.to_s.rjust(file_stat.nlink.to_s.length.to_i + 1)
+      details_files_and_directories[:owner] = Etc.getpwuid(file_stat.uid).name.rjust(Etc.getpwuid(file_stat.uid).name.length.to_i + 1)
+      details_files_and_directories[:group] = Etc.getgrgid(file_stat.gid).name.rjust(Etc.getgrgid(file_stat.gid).name.length.to_i + 1)
+      details_files_and_directories[:byte_size] = file_stat.size.to_s.rjust(BYTE_LENGTH + 1)
+      details_files_and_directories[:time] = file_stat.mtime.strftime('%m %d %H:%M').center(file_stat.mtime.strftime('%m %d %H:%M').length + 2)
     end
-    details_files_and_directorie[:name] = file_or_directory
-    details_files_and_directorie
+    details_files_and_directories[:name] = file_or_directory
+    details_files_and_directories
   end
 end
 
