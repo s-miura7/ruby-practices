@@ -47,7 +47,7 @@ def get_permission(target)
   permission
 end
 
-def get_details(files_and_directories, options)
+def get_details(files_and_directories)
   files_and_directories.map do |file_or_directory|
     details_files_and_directories = {}
     permission = get_permission(file_or_directory)
@@ -61,7 +61,6 @@ def get_details(files_and_directories, options)
     details_files_and_directories[:name] = file_or_directory
     details_files_and_directories
   end
-
 end
 
 def get_max_length(files_and_directories)
@@ -102,7 +101,7 @@ end
 
 temporary_outputs = get_file(directory_path)
 if params[:l]
-  temporary_outputs = get_details(temporary_outputs, params)
+  temporary_outputs = get_details(temporary_outputs)
   output_file_with_l(temporary_outputs)
 else
   max_file_length = get_max_length(temporary_outputs)
