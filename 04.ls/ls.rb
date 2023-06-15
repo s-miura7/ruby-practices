@@ -90,8 +90,9 @@ def output_file(output_num, files_and_directories)
 end
 
 def output_file_with_l(files_and_directories)
-  puts "total #{files_and_directories.flatten.length}"
-  files_and_directories.each do |file_or_directory|
+  outputs = get_details(files_and_directories)
+  puts "total #{outputs.flatten.length}"
+  outputs.each do |file_or_directory|
     file_or_directory.each do |_key, value|
       print value
     end
@@ -101,7 +102,6 @@ end
 
 temporary_outputs = get_file(directory_path)
 if params[:l]
-  temporary_outputs = get_details(temporary_outputs)
   output_file_with_l(temporary_outputs)
 else
   max_file_length = get_max_length(temporary_outputs)
