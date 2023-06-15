@@ -100,13 +100,17 @@ def output_file_with_l(files_and_directories)
   end
 end
 
-temporary_outputs = get_file(directory_path)
-if params[:l]
-  output_file_with_l(temporary_outputs)
-else
+def output_file_with_no_option(temporary_outputs)
   max_file_length = get_max_length(temporary_outputs)
   # 一列に出力するファイルの数
   maximum_num = temporary_outputs.length / COLUMNS + 1
   outputs = organizing_arrays(max_file_length, temporary_outputs, maximum_num)
   output_file(maximum_num, outputs)
+end
+
+temporary_outputs = get_file(directory_path)
+if params[:l]
+  output_file_with_l(temporary_outputs)
+else
+  output_file_with_no_option(temporary_outputs)
 end
