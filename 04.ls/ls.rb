@@ -50,30 +50,29 @@ end
 def get_details(files_and_directories, options)
   files_and_directories.map do |file_or_directory|
     details_files_and_directories = {}
-    if options[:l]
-      permission = get_permission(file_or_directory)
-      details_files_and_directories[:permission] = permission
-      file_stat = File::Stat.new(file_or_directory)
-      details_files_and_directories[:links] = file_stat.nlink.to_s.rjust(file_stat.nlink.to_s.length.to_i + 1)
-      details_files_and_directories[:owner] = Etc.getpwuid(file_stat.uid).name.rjust(Etc.getpwuid(file_stat.uid).name.length.to_i + 1)
-      details_files_and_directories[:group] = Etc.getgrgid(file_stat.gid).name.rjust(Etc.getgrgid(file_stat.gid).name.length.to_i + 1)
-      details_files_and_directories[:byte_size] = file_stat.size.to_s.rjust(BYTE_LENGTH + 1)
-      details_files_and_directories[:time] = file_stat.mtime.strftime('%m %d %H:%M').center(file_stat.mtime.strftime('%m %d %H:%M').length + 2)
-    end
+    permission = get_permission(file_or_directory)
+    details_files_and_directories[:permission] = permission
+    file_stat = File::Stat.new(file_or_directory)
+    details_files_and_directories[:links] = file_stat.nlink.to_s.rjust(file_stat.nlink.to_s.length.to_i + 1)
+    details_files_and_directories[:owner] = Etc.getpwuid(file_stat.uid).name.rjust(Etc.getpwuid(file_stat.uid).name.length.to_i + 1)
+    details_files_and_directories[:group] = Etc.getgrgid(file_stat.gid).name.rjust(Etc.getgrgid(file_stat.gid).name.length.to_i + 1)
+    details_files_and_directories[:byte_size] = file_stat.size.to_s.rjust(BYTE_LENGTH + 1)
+    details_files_and_directories[:time] = file_stat.mtime.strftime('%m %d %H:%M').center(file_stat.mtime.strftime('%m %d %H:%M').length + 2)
     details_files_and_directories[:name] = file_or_directory
     details_files_and_directories
   end
+
 end
 
 def get_max_length(files_and_directories)
-  files_and_directories.map { |files_and_directorie| files_and_directorie[:name].length }.max
+  files_and_directories.map { |files_and_directorie| files_and_directorie.length }.max
 end
 
 def organizing_arrays(file_name_length, files_and_directories, output_num)
   outputs = Array.new(COLUMNS) { [] }
   array_num = 0
   files_and_directories.each do |item|
-    item[:name] = item[:name].ljust(file_name_length * 2 - item[:name].scan(/[^\x01-\x7E]/).size)
+    item = item.ljust(file_name_length * 2 - item.scan(/[^\x01-\x7E]/).size)
     outputs[array_num] << item
     array_num += 1 if (outputs[array_num].length % output_num).zero?
   end
@@ -85,7 +84,7 @@ def output_file(output_num, files_and_directories)
     COLUMNS.times do |column|
       next if files_and_directories[column][time].nil?
 
-      print files_and_directories[column][time][:name]
+      print files_and_directories[column][time]
     end
     puts "\n"
   end
@@ -102,8 +101,8 @@ def output_file_with_l(files_and_directories)
 end
 
 temporary_outputs = get_file(directory_path)
-temporary_outputs = get_details(temporary_outputs, params)
 if params[:l]
+  temporary_outputs = get_details(temporary_outputs, params)
   output_file_with_l(temporary_outputs)
 else
   max_file_length = get_max_length(temporary_outputs)
