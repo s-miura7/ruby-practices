@@ -64,7 +64,7 @@ def get_details(files_and_directories)
 end
 
 def get_max_length(files_and_directories)
-  files_and_directories.map { |files_and_directorie| files_and_directorie.length }.max
+  files_and_directories.map(&:length).max
 end
 
 def organizing_arrays(file_name_length, files_and_directories, output_num)
