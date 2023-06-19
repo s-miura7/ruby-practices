@@ -6,6 +6,7 @@ require 'optparse'
 opts = OptionParser.new
 params = {}
 opts.on('-r') { |v| params[:r] = v }
+opts.on('-a') { |v| params[:a] = v }
 opts.parse!(ARGV)
 
 COLUMNS = 3
@@ -15,6 +16,8 @@ directory_path = ARGV[0] || '.'
 def get_file(path, option)
   if option[:r]
     Dir.glob('*', base: path, sort: true).reverse
+  elsif option[:a]
+    Dir.glob('*', File::FNM_DOTMATCH, base: path, sort: true)
   else
     Dir.glob('*', base: path, sort: true)
   end
@@ -42,6 +45,7 @@ def output_file(output_num, columns, files_and_directories)
     puts "\n"
   end
 end
+
 
 temporary_outputs = get_file(directory_path, params)
 max_file_length = get_max_length(temporary_outputs)
