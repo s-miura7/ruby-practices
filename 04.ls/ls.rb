@@ -15,14 +15,9 @@ COLUMNS = 3
 BYTE_LENGTH = 5
 directory_path = ARGV[0] || '.'
 
-def get_file(path, option)
-  if option[:r]
-    Dir.glob('*', base: path, sort: true).reverse
-  elsif option[:a]
-    Dir.glob('*', File::FNM_DOTMATCH, base: path, sort: true)
-  else
-    Dir.glob('*', base: path, sort: true)
-  end
+def files_and_directories(path, option)
+  files_and_directories = option[:a] ? Dir.glob('*', File::FNM_DOTMATCH, base: path, sort: true) : Dir.glob('*', base: path, sort: true)
+  option[:r] ? files_and_directories.reverse : files_and_directories
 end
 
 FILE_TYPE = {
@@ -116,7 +111,7 @@ def output_file_with_no_option(temporary_outputs)
   output_file(maximum_num, outputs)
 end
 
-temporary_outputs = get_file(directory_path, params)
+temporary_outputs = files_and_directories(directory_path, params)
 if params[:l]
   output_file_with_l(temporary_outputs)
 else
