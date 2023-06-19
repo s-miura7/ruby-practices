@@ -3,18 +3,23 @@
 
 require 'optparse'
 require 'etc'
-
 opts = OptionParser.new
+
 params = {}
 opts.on('-l') { |v| params[:l] = v }
+opts.on('-a') { |v| params[:a] = v }
 opts.parse!(ARGV)
 
 COLUMNS = 3
 BYTE_LENGTH = 5
 directory_path = ARGV[0] || '.'
 
-def get_file(path)
-  Dir.glob('*', base: path, sort: true)
+def get_file(path, option)
+  if option.include?('a')
+    Dir.glob('*', File::FNM_DOTMATCH, base: path, sort: true)
+  else
+    Dir.glob('*', base: path, sort: true)
+  end
 end
 
 FILE_TYPE = {
