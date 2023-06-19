@@ -16,13 +16,8 @@ BYTE_LENGTH = 5
 directory_path = ARGV[0] || '.'
 
 def files_and_directories(path, option)
-  if option[:r]
-    Dir.glob('*', base: path, sort: true).reverse
-  elsif option[:a]
-    Dir.glob('*', File::FNM_DOTMATCH, base: path, sort: true)
-  else
-    Dir.glob('*', base: path, sort: true)
-  end
+  files_and_directories = option[:a] ? Dir.glob('*', File::FNM_DOTMATCH, base: path, sort: true) : Dir.glob('*', base: path, sort: true)
+  option[:r] ? files_and_directories.reverse : files_and_directories
 end
 
 FILE_TYPE = {
