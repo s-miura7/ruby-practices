@@ -8,6 +8,7 @@ opts = OptionParser.new
 params = {}
 opts.on('-l') { |v| params[:l] = v }
 opts.on('-a') { |v| params[:a] = v }
+opts.on('-r') { |v| params[:r] = v }
 opts.parse!(ARGV)
 
 COLUMNS = 3
@@ -15,7 +16,9 @@ BYTE_LENGTH = 5
 directory_path = ARGV[0] || '.'
 
 def get_file(path, option)
-  if option.include?('a')
+  if option[:r]
+    Dir.glob('*', base: path, sort: true).reverse
+  elsif option[:a]
     Dir.glob('*', File::FNM_DOTMATCH, base: path, sort: true)
   else
     Dir.glob('*', base: path, sort: true)
@@ -113,7 +116,7 @@ def output_file_with_no_option(temporary_outputs)
   output_file(maximum_num, outputs)
 end
 
-temporary_outputs = get_file(directory_path)
+temporary_outputs = get_file(directory_path, params)
 if params[:l]
   output_file_with_l(temporary_outputs)
 else
